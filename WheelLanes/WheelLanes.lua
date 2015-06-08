@@ -71,7 +71,7 @@ end;
 
 function WheelLanes:updateTick(dt)
   if  WheelLanes.enabled        -- Only when wheellanes are "enabled"
-  and self.isServer             -- Only on server
+  and self.hasWheelGroundContact -- Found in script-docs patch 1.3
   and self.movingDirection ~= 0 -- Only "destroy foliage" when vehicle is actually moving
   and self:getIsActive()        -- Only when vehicle is actually active
   then
@@ -80,25 +80,25 @@ function WheelLanes:updateTick(dt)
       -- Use the defined wheels, and calculate some "cuttingArea" for each of them.
       -- This code-fragment was inspired from wheelLanes.lua by Blacky_BPG
       for i=1,table.getn(self.wheels) do
-        if self.wheels[i].hasGroundContact  -- Only when wheel has ground contact.
+        if  self.wheels[i].contact == Vehicle.WHEEL_GROUND_CONTACT     -- Found in script-docs patch 1.3
         and self.wheels[i].radius ~= nil    -- make sure 'radius' is not nil..
         and self.wheels[i].radius >= 0.5    -- ..because we want only to use wheels that has a radius of more than 0.5 units.
         then
             local x,_,z = getWorldTranslation(self.wheels[i].repr);
             x = x - 0.05;
             z = z - 0.05;
-            local x1 = x + 0.1;
-            local z1 = z;
-            local x2 = x;
-            local z2 = z + 0.1;
-            table.insert(cuttingAreasSend, {x,z,x1,z1,x2,z2});
+            --local x1 = x + 0.1;
+            --local z1 = z;
+            --local x2 = x;
+            --local z2 = z + 0.1;
+            table.insert(cuttingAreasSend, {x,z, x+0.1,z, x,z+0.1});
         end
       end
 
       if table.getn(cuttingAreasSend) > 0 then
         WheelLanesEvent.runLocally(cuttingAreasSend);
-        -- NOTE! This is going to be very "chatty" in multiplayer, and therefore may cause massive lag!
-        g_server:broadcastEvent(WheelLanesEvent:new(cuttingAreasSend));
+        ---- NOTE! This is going to be very "chatty" in multiplayer, and therefore may cause massive lag!
+        --g_server:broadcastEvent(WheelLanesEvent:new(cuttingAreasSend));
       end;
   end;
 end;
@@ -112,59 +112,59 @@ end;
 
 -- WheelLanes Event-class
 WheelLanesEvent = {};
-WheelLanesEvent_mt = Class(WheelLanesEvent, Event);
-
-InitEventClass(WheelLanesEvent, "WheelLanesEvent");
-
-function WheelLanesEvent:emptyNew()
-  local self = Event:new(WheelLanesEvent_mt);
-  self.className="WheelLanesEvent";
-  return self;
-end;
-
-function WheelLanesEvent:new(cuttingAreas)
-  local self = WheelLanesEvent:emptyNew()
-  assert(table.getn(cuttingAreas) > 0);
-  self.cuttingAreas = cuttingAreas;
-  return self;
-end;
-
-function WheelLanesEvent:readStream(streamId, connection)
-  local numAreas = streamReadUIntN(streamId, 4);
-
-  local refX = streamReadFloat32(streamId);
-  local refY = streamReadFloat32(streamId);
-  local values = Utils.readCompressed2DVectors(streamId, refX, refY, numAreas*3-1, 0.01, true);
-
-  WheelLanesEvent.destroyFoliageLayers(numAreas,values)
-end;
-
-function WheelLanesEvent:writeStream(streamId, connection)
-  local numAreas = table.getn(self.cuttingAreas);
-  streamWriteUIntN(streamId, numAreas, 4);
-
-  local refX, refY;
-  local values = {};
-  for i=1, numAreas do
-    local d = self.cuttingAreas[i];
-    if i==1 then
-      refX = d[1];
-      refY = d[2];
-      streamWriteFloat32(streamId, d[1]);
-      streamWriteFloat32(streamId, d[2]);
-    else
-      table.insert(values, {x=d[1], y=d[2]});
-    end;
-    table.insert(values, {x=d[3], y=d[4]});
-    table.insert(values, {x=d[5], y=d[6]});
-  end;
-  assert(table.getn(values) == numAreas*3 - 1);
-  Utils.writeCompressed2DVectors(streamId, refX, refY, values, 0.01);
-end;
-
-function WheelLanesEvent:run(connection)
-  print("Error: Do not run WheelLanesEvent locally");
-end;
+--WheelLanesEvent_mt = Class(WheelLanesEvent, Event);
+--
+--InitEventClass(WheelLanesEvent, "WheelLanesEvent");
+--
+--function WheelLanesEvent:emptyNew()
+--  local self = Event:new(WheelLanesEvent_mt);
+--  self.className="WheelLanesEvent";
+--  return self;
+--end;
+--
+--function WheelLanesEvent:new(cuttingAreas)
+--  local self = WheelLanesEvent:emptyNew()
+--  assert(table.getn(cuttingAreas) > 0);
+--  self.cuttingAreas = cuttingAreas;
+--  return self;
+--end;
+--
+--function WheelLanesEvent:readStream(streamId, connection)
+--  local numAreas = streamReadUIntN(streamId, 4);
+--
+--  local refX = streamReadFloat32(streamId);
+--  local refY = streamReadFloat32(streamId);
+--  local values = Utils.readCompressed2DVectors(streamId, refX, refY, numAreas*3-1, 0.01, true);
+--
+--  WheelLanesEvent.destroyFoliageLayers(numAreas,values)
+--end;
+--
+--function WheelLanesEvent:writeStream(streamId, connection)
+--  local numAreas = table.getn(self.cuttingAreas);
+--  streamWriteUIntN(streamId, numAreas, 4);
+--
+--  local refX, refY;
+--  local values = {};
+--  for i=1, numAreas do
+--    local d = self.cuttingAreas[i];
+--    if i==1 then
+--      refX = d[1];
+--      refY = d[2];
+--      streamWriteFloat32(streamId, d[1]);
+--      streamWriteFloat32(streamId, d[2]);
+--    else
+--      table.insert(values, {x=d[1], y=d[2]});
+--    end;
+--    table.insert(values, {x=d[3], y=d[4]});
+--    table.insert(values, {x=d[5], y=d[6]});
+--  end;
+--  assert(table.getn(values) == numAreas*3 - 1);
+--  Utils.writeCompressed2DVectors(streamId, refX, refY, values, 0.01);
+--end;
+--
+--function WheelLanesEvent:run(connection)
+--  print("Error: Do not run WheelLanesEvent locally");
+--end;
 
 function WheelLanesEvent.runLocally(cuttingAreas)
   local numAreas = table.getn(cuttingAreas);
@@ -283,5 +283,4 @@ function WheelLanesEvent.destroyFoliageLayers(numAreas,values)
 end;
 
 --
-
 print(string.format("Script loaded: WheelLanes.lua (v%s)  - (Making wheels destroy crops!)", WheelLanes.version));
