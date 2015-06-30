@@ -70,21 +70,20 @@ function WheelLanes:update(dt)
 end;
 
 function WheelLanes:updateTick(dt)
-  if  WheelLanes.enabled        -- Only when wheellanes are "enabled"
-  and self.hasWheelGroundContact -- Found in script-docs patch 1.3
-  and self.movingDirection ~= 0 -- Only "destroy foliage" when vehicle is actually moving
-  and self:getIsActive()        -- Only when vehicle is actually active
+  if  WheelLanes.enabled            -- Only when wheellanes are "enabled"
+  and self.isActive                 -- Only when vehicle is actually active
+  and self.hasWheelGroundContact    -- Only when (at least one) wheel have ground-contact (Found in script-docs patch 1.3)
+  and self.movingDirection ~= 0     -- Only "destroy foliage" when vehicle is actually moving
   then
       local cuttingAreasSend = {};
 
       -- Use the defined wheels, and calculate some "cuttingArea" for each of them.
       -- This code-fragment was inspired from wheelLanes.lua by Blacky_BPG
-      for i=1,table.getn(self.wheels) do
-        if  self.wheels[i].contact == Vehicle.WHEEL_GROUND_CONTACT     -- Found in script-docs patch 1.3
-        and self.wheels[i].radius ~= nil    -- make sure 'radius' is not nil..
-        and self.wheels[i].radius >= 0.5    -- ..because we want only to use wheels that has a radius of more than 0.5 units.
+      for _,wheel in ipairs(self.wheels) do
+        if  wheel.contact == Vehicle.WHEEL_GROUND_CONTACT     -- Found in script-docs patch 1.3
+        and wheel.radius >= 0.5    -- we want only to use wheels that has a radius of more than 0.5 units.
         then
-            local x,_,z = getWorldTranslation(self.wheels[i].repr);
+            local x,_,z = getWorldTranslation(wheel.repr);
             x = x - 0.05;
             z = z - 0.05;
             --local x1 = x + 0.1;
@@ -207,7 +206,6 @@ function WheelLanesEvent.destroyFoliageLayers(numAreas,values)
     );
     table.insert(areas, {x=x,z=z, widthX=widthX,widthZ=widthZ, heightX=heightX,heightZ=heightZ})
   end
-
   --
   for fruitIndex,fruit in pairs(g_currentMission.fruits) do
     if  fruitIndex ~= FruitUtil.FRUITTYPE_DRYGRASS -- dryGrass will not be affected
@@ -229,12 +227,12 @@ function WheelLanesEvent.destroyFoliageLayers(numAreas,values)
             values[vi+1].x,values[vi+1].y, values[vi+2].x,values[vi+2].y, values[vi+3].x,values[vi+3].y
           )
         end
-        -- Root-crops are only destroyed in growth-states between #2 and #4, and at #8
-        iterations = { {value=0,minGrowthState=2,maxGrowthState=4}, {value=0,minGrowthState=8,maxGrowthState=8} }
+        -- Root-crops are only destroyed in growth-states between #3 and #4, and at #8
+        iterations = { {value=0,minGrowthState=3,maxGrowthState=4}, {value=0,minGrowthState=8,maxGrowthState=8} }
       else
-        -- Destroy all growth-states between #2 (first visible growth, after seeded) through #8 (withered).
+        -- Destroy all growth-states between #3 (second visible growth, after seeded) through #8 (withered).
         -- This will not affect growth-state #9 (cutted), #10 (defoliaged), nor growth-state #1 (seeded)
-        iterations = { {value=0,minGrowthState=2,maxGrowthState=8} }
+        iterations = { {value=0,minGrowthState=3,maxGrowthState=8} }
       end
 
       for _,iteration in pairs(iterations) do
