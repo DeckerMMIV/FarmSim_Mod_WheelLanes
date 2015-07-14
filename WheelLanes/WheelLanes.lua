@@ -130,7 +130,7 @@ function WheelLanes.destroyFoliageLayers(areas)
         for _,area in pairs(areas) do
           setDensityMaskedParallelogram(
             fruit.id, -- destination foliage-id
-            area.sx,area.sz, area.wz,area.wz, area.hx,area.hz, -- destination parallelogram
+            area.sx,area.sz, area.wx,area.wz, area.hx,area.hz, -- destination parallelogram
             0, -- destination foliage's channel-start-offset-bit
             g_currentMission.numFruitStateChannels, -- destination foliage's number-of-bits-the-value-affects
             fruit.id, -- source/masked foliage-id
@@ -155,7 +155,7 @@ function WheelLanes.destroyFoliageLayers(areas)
     for _,area in pairs(areas) do
       setDensityParallelogram(
         g_currentMission.fmcFoliageWeed, -- destination foliage-id
-        area.sx,area.sz, area.wz,area.wz, area.hx,area.hz, -- destination parallelogram
+        area.sx,area.sz, area.wx,area.wz, area.hx,area.hz, -- destination parallelogram
         0, -- destination foliage's channel-start-offset-bit
         2, -- destination foliage's number-of-bits-the-value-affects
         0  -- destination foliage's value-to-set
