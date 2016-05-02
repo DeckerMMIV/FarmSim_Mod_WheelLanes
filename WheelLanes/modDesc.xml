@@ -1,24 +1,26 @@
 ﻿<?xml version="1.0" encoding="utf-8" standalone="no" ?>
-<modDesc descVersion="22">
+<modDesc descVersion="25">
     <author>Decker_MMIV</author>
-    <version>0.9.1-BETA</version>
+    
+    <contributors></contributors>
+    
+    <version>0.9.2-BETA</version>
 
     <title>
         <en>Wheel lanes in crops</en>
         <de>Wheel lanes in crops</de>
     </title>
+
     <description>
         <en>
 <![CDATA[Vehicle wheels will destroy grown crops or reduce grass.
 
-
-Decker_MMIV - fs-uk.com, forum.farming-simulator.com, modhoster.com]]>
+Decker_MMIV - fs-uk.com, modcentral.co.uk, forum.farming-simulator.com, modhoster.com]]>
         </en>
-        <de> <!-- http://translate.google.com -->
+        <de>
 <![CDATA[Vehicle wheels will destroy grown crops or reduce grass.
 
-
-Decker_MMIV - fs-uk.com, forum.farming-simulator.com, modhoster.com]]>
+Decker_MMIV - fs-uk.com, modcentral.co.uk, forum.farming-simulator.com, modhoster.com]]>
         </de>
     </description>
 
