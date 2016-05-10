@@ -42,7 +42,7 @@ function WheelLanes:load(xmlFile)
             then
                 local fruit = g_currentMission.fruits[fruitIndex]
                 if  fruit    ~= nil
-                and fruit.id ~= 0
+                and fruit.id ~= 0 -- fruit must have a foliage-layer id
                 then
                     WheelLanes.fruitTypeEffects[fruitIndex] = { i=iterations , d=defoliage }
                     log("addEffect(",fruitIndex,",",defoliage,",",iterations,")")
@@ -185,44 +185,6 @@ function WheelLanes:updateTick(dt)
 end;
 
 function WheelLanes.destroyFoliageLayers(areas)
---[[  
-  -- Destroy ALL fruits with foliage-layers that allows-seeding, disregarding whatever growth-state they are at.
-  -- - Ignore "just seeded"
-  -- - Ignore "defoliaged"
-  -- - Do not kill grass, only reduce it to growth-state #2.
-  -- - Do not kill dryGrass, as it is basically only windrows anyway.
-
-  local iterations;
-  for fruitIndex,fruit in pairs(g_currentMission.fruits) do
-    if  fruitIndex ~= FruitUtil.FRUITTYPE_DRYGRASS -- dryGrass will not be affected
-    and fruit.id ~= 0 -- fruit must have a foliage-layer id
-    and FruitUtil.fruitIndexToDesc[fruitIndex].allowsSeeding -- only destroy fruit that we can actually seed
-    then
-      if fruitIndex == FruitUtil.FRUITTYPE_GRASS 
-      or fruitIndex == FruitUtil.FRUITTYPE_LUZERNE
-      or fruitIndex == FruitUtil.FRUITTYPE_ALFALFA
-      or fruitIndex == FruitUtil.FRUITTYPE_CLOVER
-      then 
-        -- These crops are only reduced back to their second growth-state.
-        iterations = { {value=2,minGrowthState=3,maxGrowthState=7} }
-      elseif fruitIndex == FruitUtil.FRUITTYPE_SUGARBEET
-      or     fruitIndex == FruitUtil.FRUITTYPE_POTATO 
-      then
-        -- Root-crops gets automatically "defoliaged" by wheels
-        WheelLanes.updateFruitPreparerArea(areas, fruit, FruitUtil.fruitIndexToDesc[fruitIndex])
-        -- Root-crops are only destroyed in growth-states between #3 and #4, and at #8
-        iterations = { {value=0,minGrowthState=3,maxGrowthState=4}, {value=0,minGrowthState=8,maxGrowthState=8} }
-      else
-        -- Destroy all growth-states between #3 (second visible growth, after seeded) through #8 (withered).
-        -- This will not affect growth-state #9 (cutted), #10 (defoliaged), nor growth-state #1 (seeded)
-        iterations = { {value=0,minGrowthState=3,maxGrowthState=8} }
-      end
-
-      --
-      for _,iteration in pairs(iterations) do
---]]
-
-
   local fruit
   for fruitIndex,effect in pairs(WheelLanes.fruitTypeEffects) do
       fruit = g_currentMission.fruits[fruitIndex]
@@ -258,9 +220,6 @@ function WheelLanes.destroyFoliageLayers(areas)
         "greater",
         0
       );
---[[      
-    end
---]]    
   end;
 
   -- Support for SoilMod's weeds.
