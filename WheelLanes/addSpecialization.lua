@@ -41,6 +41,8 @@ end;
 
 function addSpecialization:deleteMap()
     --addSpecialization.isLoaded = false;
+
+    WheelLanes.fruitTypeEffects = nil
 end;
 
 function addSpecialization:mouseEvent(posX, posY, isDown, isUp, button)

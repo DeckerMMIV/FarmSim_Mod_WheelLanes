@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="no" ?>
+<l10n>
+    <!-- 
+        Please contribute any other translations at 
+        https://github.com/DeckerMMIV/FarmSim_Mod_WheelLanes
+    -->
+
+    <!-- Add your own name or nickname here, when you contribute to this file's translation, so I know who to put into the credits. -->
+    <translationContributors>
+        Decker_MMIV
+    </translationContributors>
+
+    <!-- Note that 'description' is only here for easier translations. I will manually copy it to ModDesc.XML later. -->
+    <description>
+Vehicle wheels will destroy grown crops or reduce grass.
+    </description>
+
+    <texts>
+    </texts>
+</l10n>
