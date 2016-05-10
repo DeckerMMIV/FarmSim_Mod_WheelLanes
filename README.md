@@ -13,6 +13,9 @@ However:
 
 ## Change-log
 
+0.9.4-BETA
+- Attempting some optimizations
+
 0.9.2-BETA
 - Misc. minor description changes
 
