@@ -258,7 +258,9 @@ function WheelLanes.destroyFoliageLayers(areas)
         "greater",
         0
       );
+--[[      
     end
+--]]    
   end;
 
   -- Support for SoilMod's weeds.
