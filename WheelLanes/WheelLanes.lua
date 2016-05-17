@@ -51,11 +51,11 @@ function WheelLanes:load(xmlFile)
         end
 
         -- These crops are only reduced back to their 2nd growth-state.
-        local newGrowthState = 2
-        addEffect(FruitUtil.FRUITTYPE_GRASS   , false , { {value=newGrowthState,minGrowthState=newGrowthState+1,maxGrowthState=7} } )
-        addEffect(FruitUtil.FRUITTYPE_LUZERNE , false , { {value=newGrowthState,minGrowthState=newGrowthState+1,maxGrowthState=7} } )
-        addEffect(FruitUtil.FRUITTYPE_ALFALFA , false , { {value=newGrowthState,minGrowthState=newGrowthState+1,maxGrowthState=7} } )
-        addEffect(FruitUtil.FRUITTYPE_CLOVER  , false , { {value=newGrowthState,minGrowthState=newGrowthState+1,maxGrowthState=7} } )
+        local minGrowthState = 3
+        addEffect(FruitUtil.FRUITTYPE_GRASS   , false , { {value=2,minGrowthState=minGrowthState,maxGrowthState=7} } )
+        addEffect(FruitUtil.FRUITTYPE_LUZERNE , false , { {value=2,minGrowthState=minGrowthState,maxGrowthState=7} } )
+        addEffect(FruitUtil.FRUITTYPE_ALFALFA , false , { {value=2,minGrowthState=minGrowthState,maxGrowthState=7} } )
+        addEffect(FruitUtil.FRUITTYPE_CLOVER  , false , { {value=2,minGrowthState=minGrowthState,maxGrowthState=7} } )
 
         -- Root-crops gets automatically "defoliaged" by wheels
         -- Root-crops are only destroyed in growth-states between #3 and #4, and at #8

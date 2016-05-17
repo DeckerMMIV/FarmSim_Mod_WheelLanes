@@ -13,6 +13,9 @@ However:
 
 ## Change-log
 
+1.0.0
+- Official release
+
 0.9.4-BETA
 - Attempting some optimizations
 
